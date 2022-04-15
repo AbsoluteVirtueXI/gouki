@@ -13,7 +13,6 @@ pub struct Config {
 }
 
 pub fn get_conf_from_file() -> Result<Config, GoukiError> {
-    //let mut conf_map = HashMap::new();
     let contents = fs::read_to_string(CONFIG_FILE)
         .unwrap()
         .to_ascii_lowercase();
