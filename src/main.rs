@@ -1,6 +1,6 @@
-use gouki::conf;
-
+use actix_files::Files;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use gouki::conf;
 
 async fn root() -> impl Responder {
     HttpResponse::Ok()
@@ -14,8 +14,12 @@ async fn main() -> std::io::Result<()> {
     let conf = conf::get_conf_from_file().unwrap();
     // launch server
     println!("Server start on {}:{}", conf.ip, conf.port);
-    HttpServer::new(|| App::new().route("/", web::get().to(root)))
-        .bind((conf.ip, conf.port))?
-        .run()
-        .await
+    HttpServer::new(|| {
+        App::new()
+            .service(Files::new("/", "./dist/").index_file("index.html"))
+            .route("/test", web::get().to(root)) // doesnt work?
+    })
+    .bind((conf.ip, conf.port))?
+    .run()
+    .await
 }
