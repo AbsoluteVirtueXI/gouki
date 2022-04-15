@@ -16,8 +16,8 @@ async fn main() -> std::io::Result<()> {
     println!("Server start on {}:{}", conf.ip, conf.port);
     HttpServer::new(|| {
         App::new()
-            .service(Files::new("/", "./dist/").index_file("index.html"))
             .route("/test", web::get().to(root)) // doesnt work?
+            .service(Files::new("/", "./dist/").index_file("index.html"))
     })
     .bind((conf.ip, conf.port))?
     .run()
